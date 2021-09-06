@@ -1,22 +1,20 @@
 from pathlib import Path
+import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+env = environ.Env()
+#read.env file
+environ.Env.read_env()
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lwg))1kw#!-oyd@(*9t@n+&c)%mp%5xc6!*f9@$ap4j&70_*nn'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
-# Application definition
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -106,8 +104,36 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if DEBUG is False:
+    SESSION_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_SECONDE = 31536000
+    SECURE_REDIRECT_EXEMPT = []
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+    ALLOWED_HOSTS =['www.hotelsaurahaadventure.com']
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    DATABASES ={
+        'default':{
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME':'',
+            'USER': '',
+            'PASSWORD':'',
+            'HOST':'',
+            'PORT':''
+        }
+    }
